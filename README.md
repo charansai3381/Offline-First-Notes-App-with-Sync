@@ -1,12 +1,33 @@
-# React + Vite
+1. Design Decisions & Tradeoffs
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Offline-First Architecture:
+All notes are stored in the browser using IndexedDB. They are synced to the backend only when network is available.
 
-Currently, two official plugins are available:
+Client-Wins Sync Strategy:
+In the event of a conflict between local and remote versions, the local note takes precedence and overwrites the remote.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Markdown Support:
+Used @uiw/react-md-editor to allow rich text editing using markdown.
 
-## Expanding the ESLint configuration
+Simple Backend:
+JSON Server acts as a lightweight REST API for simulating backend interactions.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. Assumptions & Limitations
+The app assumes users prefer local edits over remote ones during sync.
+
+Notes can be created, edited, and deleted, but user authentication is not included.
+
+Syncing only works when online — offline changes are queued until the next sync.
+
+The backend is not persistent and should not be used in production.
+
+3. How to Run and Test the App
+Make sure the backend is running (npx json-server backend/db.json --port 4000)
+
+Open the app in the browser (npm run dev)
+
+Try creating notes while offline — they will sync once you're back online.
+
+Test deletion, editing, and markdown rendering.
+
+Check your IndexedDB (DevTools > Application > IndexedDB) to inspect local data.
