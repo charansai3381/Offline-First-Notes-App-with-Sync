@@ -14,11 +14,17 @@ export const addNote = async (note) => {
 };
 
 export const getAllNotes = async () => {
-  return await db.notes.toArray();
+  const allNotes = await db.notes.toArray();
+  console.log("📦 All notes from IndexedDB:", allNotes);
+  return allNotes;
 };
 
-export const updateNote = async (id, updates) => {
-  await db.notes.update(id, updates);
+export const updateNote = async (id, updatedFields) => {
+  const existingNote = await db.notes.get(id);
+  if (!existingNote) return;
+
+  const updatedNote = { ...existingNote, ...updatedFields };
+  await db.notes.put(updatedNote);
 };
 
 export const deleteNote = async (id) => {
